@@ -1,0 +1,70 @@
+\hypertarget{group__TypeChecker}{
+\section{Decorator for type checking function arguments.}
+\label{group__TypeChecker}\index{Decorator for type checking function arguments.@{Decorator for type checking function arguments.}}
+}
+
+
+The TypeChecker module provides a decorator, require, to check the validity of arguments to a Python function.  
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{group__TypeChecker_ga733bd113d0f063a4522c00a798198111}{utils::TypeChecker.require}
+\begin{DoxyCompactList}\small\item\em Decorator for type checking. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The TypeChecker module provides a decorator, require, to check the validity of arguments to a Python function. \begin{DoxyAuthor}{Author}
+Siddhu Warrier (\href{mailto:siddhuwarrier@gmail.com}{\tt siddhuwarrier@gmail.com}) 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+17/01/2010 
+\end{DoxyDate}
+
+
+\subsection{Function Documentation}
+\hypertarget{group__TypeChecker_ga733bd113d0f063a4522c00a798198111}{
+\index{TypeChecker@{TypeChecker}!require@{require}}
+\index{require@{require}!TypeChecker@{TypeChecker}}
+\subsubsection[{require}]{\setlength{\rightskip}{0pt plus 5cm}def utils.TypeChecker.require ( {\em validKwargs}, \/   {\em kwargsCompulsory} = {\ttfamily False}, \/   {\em typeMap})}}
+\label{group__TypeChecker_ga733bd113d0f063a4522c00a798198111}
+
+
+Decorator for type checking. This method performs type checking for Python function arguments. This code is modified from Per Vognsen's ActiveState recipe 454322 \href{http://code.activestate.com/recipes/454322/}{\tt http://code.activestate.com/recipes/454322/} Vognsen's code has been cleaned up and modified in order to support checking multiple kwargs. It also performs checks as to whether the kwarg provided is valid.
+
+Example: 
+\begin{DoxyCode}
+from sidutils.TypeChecker import require
+
+@require(validKwargs = ['z'], x = int, y = (int, float), z = str) #x can only be 
+      int, y can be int or float.
+def foo(x, y, **kwargs):
+        pass
+if __name__ == "__main__":
+    foo(3,5.6) #will work
+    foo(3, 5) #will work
+    foo(x = 3, y = 5) #will work
+    try:
+        foo(x = "string", y = 2) #TypeError
+    except TypeError as typeError:
+        print typeError.args[0]
+    foo(x = 23, y = 5, z = "ss") #will work
+    foo(23, 5, z = "superman") #will work
+    try:
+        foo(5,5, m = "xd") #NameError
+    except NameError as nameError:
+        print nameError.args[0]
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+\item[{\em validKwargs}](list): The list of valid keyword arguments for the method/function being decorated. \item[{\em kwargsCompulsory}](boolean): Set to indicate whether the function's keyword arguments (in validKwargs) should be compulsory or not. Default: False. \item[{\em typeMap}](dictionary of tuples/strings): The typemap is a dictionary of the argument names for which we want to perform type checking. Each key specifies the acceptable type(s) for the argument specified in the key. If there is more than one type, the key contains a tuple; if not, it may contain either a tuple or a string. \end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+\item[{\em NameError}]When argument invalid, or required argument not found. \item[{\em TypeError}]When argument type does not match argument type expected. \end{DoxyExceptions}
+\begin{DoxyAuthor}{Author}
+Siddhu Warrier (\href{mailto:siddhuwarrier@gmail.com}{\tt siddhuwarrier@gmail.com}) 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+17/01/2010 
+\end{DoxyDate}
