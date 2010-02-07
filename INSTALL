@@ -1,0 +1,42 @@
+Installation Instructions
+*************************
+
+Copyright (C) 1994, 1995, 1996, 1999, 2000, 2001, 2002, 2004, 2005,
+2006, 2007, 2008, 2009 Free Software Foundation, Inc.
+
+   This file is free documentation; the Free Software Foundation gives
+unlimited permission to copy, distribute and modify it.
+
+Basic Installation
+==================
+
+To install lockindicator-applet into /usr/lib/python2.6/site-packages/, please type:
+
+./configure
+make
+make install
+
+The configure file has several options that might be useful. These include:
+
+1. --enable-deb-install: Installing on Ubuntu 9.04+: Versions of Ubuntu greater 
+than 9.04 install Python programs automatically into /usr/local, and not /usr.
+If the user forces the install into /usr, the support packages are installed 
+into /usr/lib/python/site-packages, and not /usr/lib/python/dist-packages. The
+former is not in the PYTHONPATH. This is a problem for GNOME applications as 
+exporting PYTHONPATH in bash will not work! So the --enable-deb-install is used
+to force the package to be installed into dist-packages/ and not site-packages.
+
+2. --prefix: Specify the prefix to install the program to. By default, this is
+/usr/local. Please refer to note 1 above about potential issues involved in in-
+-stalling it into /usr/.
+
+Requirements
+============
+1. Python version >= 2.6
+2. python-setuptools
+3. doxygen (to produce documentation)
+4. python-keybinder
+
+I have had difficulty getting it to work on Ubuntu 9.04, but I'm sure a bit of 
+hacking would get it working in no time. python-keybinder is not in the 
+universe repo for Jaunty.
