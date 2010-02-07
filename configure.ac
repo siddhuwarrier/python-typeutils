@@ -1,55 +1,6 @@
 #configure.ac file for python-typeutils
-AC_INIT(python-typeutils, version-0.2)
-#add the python m4 files
-m4_include([/usr/share/aclocal-1.11/python.m4])
-m4_include([/usr/share/aclocal-1.11/runlog.m4])
-
-#check if the user specifies a specific Doxygen config file
-AC_ARG_WITH(doxyfile, [  --with-doxyfile         path to doxygen config file (default: Doxyfile)])
-
-if test "$with_doxyfile" == "yes"
-then
-	AC_MSG_ERROR([Please specify path to Doxyfile when using this option.])
-elif test "$with_doxyfile" != ""
-then
-	if test -f $with_doxyfile
-	then
-		AC_SUBST(DOXYGEN_FILE, $with_doxyfile)
-	else
-		AC_MSG_ERROR([Doxygen config File $with_doxyfile not found.])
-	fi
-else
-	if test -f Doxyfile
-	then
-		AC_SUBST(DOXYGEN_FILE, Doxyfile)
-	else
-		AC_MSG_ERROR([Python setup File $with_setup not found.])
-	fi
-fi
-
-#specify the name of the setup.py file (if different from setup.py)
-AC_ARG_WITH(setup, [  --with-setup            path to setup.py file (default: setup.py)])
-
-if test "$with_setup" == "yes"
-then
-	AC_MSG_ERROR([Please specify path to Python setup file when using this option.])
-elif test "$with_setup" != ""
-then
-	if test -f $with_setup
-	then
-		AC_SUBST(PYTHON_SETUP_FILE, $with_setup)
-	else
-		AC_MSG_ERROR([Python setup File $with_setup not found.])
-	fi
-else
-	if test -f setup.py
-	then
-		AC_SUBST(PYTHON_SETUP_FILE,setup.py)
-	else
-		AC_MSG_ERROR([Python setup File $with_setup not found.])
-	fi
-fi
-
+AC_INIT(python-typeutils, 1.0.0)
+AC_SUBST(VERSION, 1.0.0)
 #check for python version 2.6. setup.py does this check as well
 #but this will tell us where python is located. This is useful for
 #the makefile
@@ -58,10 +9,42 @@ AM_PATH_PYTHON([2.6])
 #check for doxygen program
 AC_PATH_PROG([DOXYGEN_BINARY], [doxygen])
 
-#specify the default prefix, for when the user does not specify it.
-#this is useful as configure defaults to /usr/local while distutils
-#does /usr/local.
-AC_PREFIX_DEFAULT('/usr')
+######### USER OPTIONS ################
+#check if the user specifies a specific Doxygen config file
+AC_ARG_ENABLE(deb-install, 
+	[  --enable-deb-install         Enable Debian-style Python installs (into dist-packages).])
+
+########OPTION CHECKING##############
+#check if the deb-install flag has been enabled.
+if test "$enable_deb_install" == "yes"
+then
+	AC_MSG_NOTICE([Enabling debian install...])
+	AC_SUBST(DEBIAN_FLAG, "--install-layout=deb")
+else
+	AC_SUBST(DEBIAN_FLAG, "")
+fi 
+
+#check if the user has specified a prefix
+if test "$prefix" != NONE
+then
+	AC_SUBST(PREFIX_FLAG, "--prefix="$prefix)
+	if test "$prefix" == "/usr/local"
+	then
+		AC_SUBST(PY_PKG_DIR, $prefix"/lib/python"$PYTHON_VERSION"/dist-packages")
+	elif test "$enable_deb_install" == "yes"
+	then
+		AC_SUBST(PY_PKG_DIR, $prefix"/lib/python"$PYTHON_VERSION"/dist-packages")
+	else
+		AC_SUBST(PY_PKG_DIR, $prefix"/lib/python"$PYTHON_VERSION"/site-packages")
+	fi
+else
+	AC_SUBST(PREFIX_FLAG, "")
+	AC_SUBST(PY_PKG_DIR, "/usr/local/lib/python"$PYTHON_VERSION"/dist-packages")
+fi
+
+#substituted flags for Make.
 
 #output all of this into Makefile.in, producing Makefile.
 AC_OUTPUT(Makefile)
+#produce setup.py
+AC_OUTPUT(setup.py)

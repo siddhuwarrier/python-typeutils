@@ -5,25 +5,25 @@
 #constants
 DOXYGEN_BINARY = @DOXYGEN_BINARY@
 DOXYGEN_FAILED = 2
-DOXYGEN_FILE = @DOXYGEN_FILE@
+DOXYGEN_FILE = Doxyfile
 PYTHON=@PYTHON@
-PYTHON_SETUP_FILE = @PYTHON_SETUP_FILE@
-PREFIX = @prefix@
+PREFIX=@prefix@
 BUILD = build/
 DOXYGEN_DIR = doxygen-docs/
-DIST = dist/
 
+PY_FLAGS = @PREFIX_FLAG@ @DEBIAN_FLAG@
+PY_PKG_DIR = @PY_PKG_DIR@
 #builds code in same directory.
 build: doxygen build-docs
 	echo "###############################"
 	echo "building..."
-	${PYTHON} setup.py build
+	$(PYTHON) setup.py build
 	
 #install to prefix specified
 install: doxygen build-docs
 	echo "###############################"
 	echo "installing..."
-	${PYTHON} setup.py install --prefix=${PREFIX}
+	$(PYTHON) setup.py install $(PY_FLAGS)
 
 #build doxygen documentation.
 doxygen:
@@ -36,7 +36,12 @@ build-docs:
 	cd ${DOXYGEN_DIR}/latex; make 1>/dev/null
 
 clean:
-	rm -rf ${BUILD} ${DOXYGEN_DIR} ${PREFIX}/${DIST} autom4te.cache
+	rm -rf ${BUILD} ${DOXYGEN_DIR}
 	rm -f config.log config.status
+	rm -f Makefile
 	echo "Cleaned."
- 
+
+uninstall:
+	rm -r $(PY_PKG_DIR)/python_typeutils*.egg-info
+	rm -r $(PY_PKG_DIR)/typeutils
+	rm -r $(PREFIX)/share/doc/python-typeutils

@@ -6,22 +6,6 @@ While this flies in the face of all the talk of dynamic typing in Python, it
 can come in quite handy when wrapping C functions. And it gets rid of the
 requirement of having to write asserts *if* you do need type checking.I
 
-INSTALLATION
--------------------------------------------------------------------------------
-To install python-typeutils into /usr/lib/python2.6/site-packages/, please type:
-
-./configure
-make
-make install
-
-The Makefile uses distutils (and a wee bit of setuptools) in the background
-
-REQUIREMENTS
--------------------------------------------------------------------------------
-1. Python version >= 2.6
-2. python-setuptools
-3. doxygen (to produce documentation)
-
 WHAT DOES python-typeutils PRODUCE
 -------------------------------------------------------------------------------
 1. The python files in /usr/lib/python2.6/site-packages (by default)

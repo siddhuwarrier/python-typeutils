@@ -1,3 +1,5 @@
+2010-02-07 Siddhu Warrier
+ * Bumping to version 1.0.0. We've got a better build system in place.
 2010-02-02 Siddhu Warrier
  * First commit of python-typeutils to git repository. Compiles and works as 
    a standalone library.
